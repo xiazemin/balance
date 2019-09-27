@@ -20,6 +20,21 @@ func main() {
 		balanceName = os.Args[1]
 	}
 
+	for i:=0;i<8;i++{
+		balanceName="slotmaphash"
+		host := fmt.Sprintf("192.168.%d.%d", rand.Intn(255), rand.Intn(255))
+		one := balance.NewInstance(host, 8080)
+		fmt.Println(balance.Get(balanceName).Add(one))
+		if smh,ok:=balance.Get(balanceName).(*balance.SlotMapHash);ok{
+			fmt.Println(smh.SetSlot(one,uint32(balance.NumSLots/8*i),uint32(balance.NumSLots/8*(i+1))))
+		}
+	}
+	for i:=0;i<8 ;i++  {
+		balanceName="slotmaphash"
+		fmt.Println(balance.Get(balanceName).DoBalance("192.168.1.2"))
+		fmt.Println(balance.Get(balanceName).DoBalance("192.168.89.255"))
+	}
+
 	for i:=0;i<3;i++{
 		balanceName="consitanthash"
 		host := fmt.Sprintf("192.168.%d.%d", rand.Intn(255), rand.Intn(255))
