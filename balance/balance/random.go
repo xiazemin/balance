@@ -13,13 +13,24 @@ func init() {
 }
 
 type RandomBalance struct {
+	insts []*Instance
 }
 
-func (p *RandomBalance) DoBalance(insts []*Instance, key ...string) (inst *Instance, err error) {
-	if len(insts)==0{
+func (p *RandomBalance)RegisterNodes(insts []*Instance)IBalance  {
+	p.insts=insts
+	return p
+}
+
+func (p *RandomBalance)Add(node *Instance)error{
+	p.insts=append(p.insts,node)
+	return nil
+}
+
+func (p *RandomBalance) DoBalance(key ...string) (inst *Instance, err error) {
+	if len(p.insts)==0{
 		err=errors.New("no instance")
 		return
 	}
 	rand.Seed(time.Now().UnixNano())
-	return insts[rand.Intn(len(insts))],nil
+	return p.insts[rand.Intn(len(p.insts))],nil
 }

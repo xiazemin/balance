@@ -1,25 +1,9 @@
 package balance
-
-import "github.com/golang/go/src/fmt"
-
-type Instance struct {
-	Ip   string
-	Port int
-}
-
-func NewInstance(ip string, port int) *Instance {
-	return &Instance{
-		Ip:   ip,
-		Port: port,
-	}
-}
-
-func (this *Instance) String() string {
-	return this.Ip + ":" + fmt.Sprintf("%d", this.Port)
-}
-
 type IBalance interface {
-	DoBalance(insts []*Instance, key ...string) (inst *Instance, err error)
+	RegisterNodes(insts []*Instance)IBalance
+	//*IBalance is pointer to interface, not interface
+	DoBalance(key ...string) (inst *Instance, err error)
+	Add(node *Instance)error
 }
 
 var mBalanceManger map[string]IBalance

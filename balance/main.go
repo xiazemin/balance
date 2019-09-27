@@ -20,20 +20,27 @@ func main() {
 		balanceName = os.Args[1]
 	}
 
+	for i:=0;i<3;i++{
+		balanceName="consitanthash"
+		host := fmt.Sprintf("192.168.%d.%d", rand.Intn(255), rand.Intn(255))
+		one := balance.NewInstance(host, 8080)
+		fmt.Println(balance.Get(balanceName).Add(one))
+		fmt.Println(balance.Get(balanceName).DoBalance("192.168.1.2"))
+	}
 	for i:=0;i<2;i++{
 		balanceName="iphash"
-		fmt.Println(balance.Get(balanceName).DoBalance(insts,"192.168.1.2"))
-		fmt.Println(balance.Get(balanceName).DoBalance(insts,"192.168.2.2"))
+		fmt.Println(balance.Get(balanceName).RegisterNodes(insts).DoBalance("192.168.1.2"))
+		fmt.Println(balance.Get(balanceName).DoBalance("192.168.2.2"))
 
 	}
 	for i:=0;i<20;i++{
 		balanceName="roundrobin"
-		fmt.Println(balance.Get(balanceName).DoBalance(insts,balanceName))
+		fmt.Println(balance.Get(balanceName).RegisterNodes(insts).DoBalance(balanceName))
 
 	}
 	balanceName = "random"
 	for {
-		inst, err := balance.Get(balanceName).DoBalance(insts,balanceName)
+		inst, err := balance.Get(balanceName).RegisterNodes(insts).DoBalance(balanceName)
 		if err != nil {
 			fmt.Println("do balance err:", err)
 			fmt.Fprintf(os.Stdout, "do balance err\n")
